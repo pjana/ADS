@@ -3,10 +3,8 @@
 """
 Created on Fri Apr  7 12:45:48 2017
 
-This is the new line
-
 @author: preranajana
-run in python 3.6
+run in python 2.7
 """
 import pandas as pd
 import numpy as np
@@ -53,6 +51,7 @@ for review in text:
 
     if count % 1000 == 0:
         print(count)
+
 sentiments = sentiments.set_index(reviews.index)
 result = pd.concat([reviews, sentiments], axis=1, join_axes=[reviews.index], join='outer')
 result.to_csv('sentiments_base5000.csv', sep=',')
