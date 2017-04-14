@@ -48,9 +48,7 @@ for item in list_cat:
     print(index)
     for each in item:
         if each in food_category:
-            print(item)
-            print('--------')
-            print(each)
+            print item + '--------' + each
             food_rest_index.append(index)
             break
     index += 1
