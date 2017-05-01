@@ -9,7 +9,17 @@ run in python 3.6
 import pandas as pd
 import json
 import pickle
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+import string
+from stemming.porter2 import stem
+import gensim
+from gensim import corpora
 
+stop = set(stopwords.words('english'))
+exclude = set(string.punctuation)
+lemma = WordNetLemmatizer()
 """
 Read the json files
 """
@@ -66,6 +76,27 @@ rel_user_reviews = df[df.business_id.isin(reviews_more30)] # 86,395
 rel_user_reviews.to_pickle('rel_user_reviews.pkl')
 pitt_food_final.to_pickle('pitt_food_final.pkl')
 
+"""
+pre process and clean each review
+"""
+def clean(doc):
+    stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
+    punc_free = ''.join(ch for ch in stop_free if ch not in exclude)
+    normalized = " ".join(lemma.lemmatize(word) for word in punc_free.split())
+    stemmed = " ".join(stem(word) for word in normalized.split())
+    return stemmed
+
+
+reviews = pd.read_pickle('rel_user_reviews.pkl') # (115841, 10)
+reviews_text = reviews['text'].tolist()
+reviews_clean = []
+
+for j in range(10): #range(len(reviews_text)):
+    if j % 2000 == 0:
+        print(j)
+    reviews_clean.append(clean((reviews_text[j])))
+
+reviews['clean_reviews'] = reviews_clean
 """
 Get the input format ready for CTM
 """
