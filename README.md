@@ -1,2 +1,2 @@
-# ADS
+# ADS - Team project
 To go or not to go...
